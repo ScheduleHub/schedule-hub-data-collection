@@ -9,12 +9,12 @@ import {
 import { Alert } from '@material-ui/lab';
 import { blue } from '@material-ui/core/colors';
 import axios from 'axios';
-import './index.css';
-import { getCourseCode } from 'utils/courses';
-import logo from 'res/icon.svg';
-import step1 from 'res/calendar-step-1.png';
-import step2 from 'res/calendar-step-2.png';
 import _ from 'lodash';
+import './index.css';
+import { getCourseCode } from '../utils/courses';
+import logo from '../res/icon.svg';
+import step1 from '../res/calendar-step-1.png';
+import step2 from '../res/calendar-step-2.png';
 
 const apiKey = process.env.REACT_APP_UW_API_KEY;
 
