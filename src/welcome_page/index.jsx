@@ -57,7 +57,7 @@ class WelcomePage extends React.Component {
   }
 
   loadCourseInfo = (courseCodes, courseNames) => {
-    const timeout = 8000;
+    const timeout = 10000;
     this.setState({ fullPageOverlayOpen: true });
     const instance = axios.create({
       baseURL: 'https://api.uwaterloo.ca/v2/courses',
