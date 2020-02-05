@@ -45,9 +45,7 @@ const areAssociated = (classInfo1, classInfo2) => (
  * Returns the course code of a class.
  * @param {ClassInfo} classInfo the ClassInfo object to get course code from.
  */
-const getCourseCode = (classInfo) => {
-  return classInfo === undefined ? null : `${classInfo.subject} ${classInfo.catalog_number}`;
-};
+const getCourseCode = (classInfo) => (classInfo === undefined ? null : `${classInfo.subject} ${classInfo.catalog_number}`);
 
 /**
  * Determines whether a class in online or not.
