@@ -7,7 +7,7 @@ import {
   DialogContent, DialogTitle, DialogContentText,
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
-import { blue } from '@material-ui/core/colors';
+import { pink } from '@material-ui/core/colors';
 import axios from 'axios';
 import _ from 'lodash';
 import './index.css';
@@ -23,9 +23,9 @@ const snackbarWarningText = 'Your course info cannot be read. Please try again a
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: blue[500],
-      light: '#6ec6ff',
-      dark: '#0069c0',
+      main: pink[300],
+      dark: '#ba2d65',
+      light: '#ff94c2'
     },
   },
 });
