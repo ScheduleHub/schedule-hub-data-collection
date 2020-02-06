@@ -16,7 +16,7 @@ import logo from '../res/icon.svg';
 import step1 from '../res/calendar-step-1.png';
 import step2 from '../res/calendar-step-2.png';
 
-const apiKey = process.env.REACT_APP_UW_API_KEY;
+const apiKey = "e11fd522920fbd64cb49ecd93464e8a3";
 
 const snackbarWarningText = 'Your course info cannot be read. Please try again and make sure the text is not modified.';
 
