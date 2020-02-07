@@ -4,7 +4,7 @@ import {
   Card, CardContent, CardHeader, CardMedia, CardActions,
   CssBaseline, Snackbar, InputAdornment, Backdrop, createMuiTheme,
   ThemeProvider, Box, CircularProgress, Dialog, DialogActions,
-  DialogContent, DialogTitle, DialogContentText,
+  DialogContent, DialogTitle, DialogContentText, Container
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { pink } from '@material-ui/core/colors';
@@ -15,6 +15,7 @@ import { getCourseCode } from '../utils/courses';
 import logo from '../res/icon.svg';
 import step1 from '../res/calendar-step-1.png';
 import step2 from '../res/calendar-step-2.png';
+import { Input } from 'reactstrap'
 
 const apiKey = "e11fd522920fbd64cb49ecd93464e8a3";
 
@@ -152,21 +153,21 @@ class WelcomePage extends React.Component {
       id: questId,
       sections: courseCodes,
     },
-    {
-      timeout,
-    }).then((response) => {
-      console.log(response);
-      this.showSnackbar('success', 'Thank you! We will notify you by email if you win the prize.');
-      this.setState({ fullPageOverlayOpen: false });
-    }).catch((error) => {
-      if (error.message === `timeout of ${timeout}ms exceeded`) {
-        this.showSnackbar('error', 'Network Timeout. Please check your internet connection.');
-      } else {
-        this.showSnackbar('error', error.message);
-      }
-      console.log(error);
-      this.setState({ fullPageOverlayOpen: false });
-    });
+      {
+        timeout,
+      }).then((response) => {
+        console.log(response);
+        this.showSnackbar('success', 'Thank you! We will notify you by email if you win the prize.');
+        this.setState({ fullPageOverlayOpen: false });
+      }).catch((error) => {
+        if (error.message === `timeout of ${timeout}ms exceeded`) {
+          this.showSnackbar('error', 'Network Timeout. Please check your internet connection.');
+        } else {
+          this.showSnackbar('error', error.message);
+        }
+        console.log(error);
+        this.setState({ fullPageOverlayOpen: false });
+      });
     this.handleDialogClose();
   }
 
@@ -201,89 +202,71 @@ class WelcomePage extends React.Component {
             </Alert>
           </Snackbar>
           <img src={logo} alt="Logo" className="logo" />
-
-          <Grid container justify="center" spacing={6}>
-            <Grid item xs={12} md={4} lg={3}>
-              <Card className="card" raised>
-                <CardHeader title="Step 1" className="header" />
-                <CardContent>
-                  <Typography variant="body1">
-                    Go to&nbsp;
+            <Grid container justify="center" spacing={5}>
+              <Grid item xs={12} md lg={3}>
+                <Card className="card" raised>
+                  <CardHeader title="Step 1" className="header" />
+                  <CardContent>
+                    <Typography variant="body1">
+                      Go to&nbsp;
                     <Link href="https://quest.pecs.uwaterloo.ca/psp/SS/ACADEMIC/SA/?cmd=login&languageCd=ENG" target="_blank">Quest</Link>
-                    &nbsp;and click &quot;Class Schedule&quot;.
+                      &nbsp;and click &quot;Class Schedule&quot;.
                   </Typography>
-                </CardContent>
-                <CardMedia
-                  image={step1}
-                  title="Go to Class Schedule"
-                  className="step-img"
-                />
-              </Card>
-            </Grid>
-            <Grid item xs={12} md={4} lg={3}>
-              <Card className="card" raised>
-                <CardHeader title="Step 2" className="header" />
-                <CardContent>
-                  <Typography variant="body1">Choose your term, select all and copy.</Typography>
-                </CardContent>
-                <CardMedia
-                  image={step2}
-                  title="Select All and Copy"
-                  className="step-img"
-                />
-              </Card>
-            </Grid>
-            <Grid item xs={12} md={4} lg={3}>
-              <Card raised style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                <CardHeader title="Step 3" className="header" />
-                <CardContent>
-                  <Box mb={2}>
-                    <Typography variant="body1">Paste into the box below.</Typography>
-                  </Box>
-                  <TextField
-                    value={rawCourses}
-                    onPaste={(e) => this.handlePaste(e.clipboardData.getData('text/plain'))}
-                    multiline
-                    required
-                    variant="outlined"
-                    fullWidth
-                    rows={14}
-                    onChange={(e) => this.handleRawCoursesInputChange(e.target.value)}
+                  </CardContent>
+                  <CardMedia
+                    image={step1}
+                    title="Go to Class Schedule"
+                    className="step-img"
                   />
-
-                </CardContent>
-                <CardActions className="stick-bottom">
-                  <Box p={1} width={1}>
-                    <Dialog open={dialogOpen} onClose={this.handleDialogClose} aria-labelledby="form-dialog-title">
-                      <DialogTitle id="form-dialog-title">Submit</DialogTitle>
-                      <DialogContent>
-                        <DialogContentText>
-                          Please enter your UWaterloo ID for a chance win a prize!
-                        </DialogContentText>
-                        <TextField
-                          autoFocus
-                          margin="dense"
-                          id="name"
-                          label="Email Address"
-                          fullWidth
-                          InputProps={{ endAdornment: <InputAdornment position="end">@uwaterloo.ca</InputAdornment> }}
-                          onChange={(e) => this.handleEmailAddressChange(e.target.value)}
-                        />
-                      </DialogContent>
-                      <DialogActions>
-                        <Button onClick={this.handleDialogClose} color="primary">
-                          Cancel
-                        </Button>
-                        <Button onClick={this.handleSubmitClick} color="primary">
-                          Submit
-                        </Button>
-                      </DialogActions>
-                    </Dialog>
-                  </Box>
-                </CardActions>
-              </Card>
+                </Card>
+              </Grid>
+              <Grid item xs={12} md lg={3}>
+                <Card className="card" raised style={{display: 'flex', flexDirection: 'column', height: '100%'}}>
+                  <CardHeader title="Step 2" className="header" />
+                  <CardContent>
+                    <Typography variant="body1">Choose your term, select all and copy.</Typography>
+                  </CardContent>
+                  <CardMedia
+                    image={step2}
+                    title="Select All and Copy"
+                    className="step-img stick-bottom"
+                  />
+                </Card>
+              </Grid>
+              <Grid item xs={12} md lg={3}>
+      
+                <Card raised style={{  display: 'flex', flexDirection: 'column', height: '100%' }}>
+                  <CardHeader title="Step 3" className="header" />
+                  <CardContent style={{ display: 'flex', flexDirection: 'column', flexGrow:1 ,paddingBottom: "16px" }}>
+                    <Box mb={2}>
+                      <Typography variant="body1">Paste into the box below.</Typography>
+                    </Box>
+                    
+                    <TextField style={{flexGrow:1}}
+                      value={rawCourses}
+                      onPaste={(e) => this.handlePaste(e.clipboardData.getData('text/plain'))}
+                      multiline
+                      required
+                      variant="outlined"
+                      fullWidth
+                      rows={12}
+                      onChange={(e) => this.handleRawCoursesInputChange(e.target.value)}
+                      InputProps={{
+                        style: {
+                          height:"100%"
+                        }
+                      }}
+                      inputProps={{
+                        style: {
+                          height:"100%"
+                        }
+                      }}
+                    />
+     
+                  </CardContent>
+                </Card>
+              </Grid>
             </Grid>
-          </Grid>
         </Box>
         <Backdrop
           style={{
@@ -294,6 +277,31 @@ class WelcomePage extends React.Component {
         >
           <CircularProgress color="inherit" />
         </Backdrop>
+        <Dialog open={dialogOpen} onClose={this.handleDialogClose} aria-labelledby="form-dialog-title">
+          <DialogTitle id="form-dialog-title">Submit</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Please enter your UWaterloo ID for a chance win a prize!
+                        </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Email Address"
+              fullWidth
+              InputProps={{ endAdornment: <InputAdornment position="end">@uwaterloo.ca</InputAdornment> }}
+              onChange={(e) => this.handleEmailAddressChange(e.target.value)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleDialogClose} color="primary">
+              Cancel
+                        </Button>
+            <Button onClick={this.handleSubmitClick} color="primary">
+              Submit
+                        </Button>
+          </DialogActions>
+        </Dialog>
       </ThemeProvider>
     );
   }
