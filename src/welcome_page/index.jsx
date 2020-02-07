@@ -1,10 +1,10 @@
 import React from 'react';
 import {
   Button, TextField, Typography, Grid, Link,
-  Card, CardContent, CardHeader, CardMedia, CardActions,
+  Card, CardContent, CardHeader, CardMedia,
   CssBaseline, Snackbar, InputAdornment, Backdrop, createMuiTheme,
   ThemeProvider, Box, CircularProgress, Dialog, DialogActions,
-  DialogContent, DialogTitle, DialogContentText, Container
+  DialogContent, DialogTitle, DialogContentText,
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { pink } from '@material-ui/core/colors';
@@ -15,9 +15,8 @@ import { getCourseCode } from '../utils/courses';
 import logo from '../res/icon.svg';
 import step1 from '../res/calendar-step-1.png';
 import step2 from '../res/calendar-step-2.png';
-import { Input } from 'reactstrap'
 
-const apiKey = "e11fd522920fbd64cb49ecd93464e8a3";
+const apiKey = 'e11fd522920fbd64cb49ecd93464e8a3';
 
 const snackbarWarningText = 'Your course info cannot be read. Please try again and make sure the text is not modified.';
 
@@ -26,7 +25,7 @@ const theme = createMuiTheme({
     primary: {
       main: pink[300],
       dark: '#ba2d65',
-      light: '#ff94c2'
+      light: '#ff94c2',
     },
   },
 });
@@ -149,25 +148,28 @@ class WelcomePage extends React.Component {
     }
     this.setState({ fullPageOverlayOpen: true });
     const url = 'https://qemn8c6rx9.execute-api.us-east-2.amazonaws.com/test/handlescheduleinput';
-    axios.post(url, {
-      id: questId,
-      sections: courseCodes,
-    },
+    axios.post(
+      url,
+      {
+        id: questId,
+        sections: courseCodes,
+      },
       {
         timeout,
-      }).then((response) => {
-        console.log(response);
-        this.showSnackbar('success', 'Thank you! We will notify you by email if you win the prize.');
-        this.setState({ fullPageOverlayOpen: false });
-      }).catch((error) => {
-        if (error.message === `timeout of ${timeout}ms exceeded`) {
-          this.showSnackbar('error', 'Network Timeout. Please check your internet connection.');
-        } else {
-          this.showSnackbar('error', error.message);
-        }
-        console.log(error);
-        this.setState({ fullPageOverlayOpen: false });
-      });
+      },
+    ).then((response) => {
+      console.log(response);
+      this.showSnackbar('success', 'Thank you! We will notify you by email if you win the prize.');
+      this.setState({ fullPageOverlayOpen: false });
+    }).catch((error) => {
+      if (error.message === `timeout of ${timeout}ms exceeded`) {
+        this.showSnackbar('error', 'Network Timeout. Please check your internet connection.');
+      } else {
+        this.showSnackbar('error', error.message);
+      }
+      console.log(error);
+      this.setState({ fullPageOverlayOpen: false });
+    });
     this.handleDialogClose();
   }
 
@@ -190,7 +192,7 @@ class WelcomePage extends React.Component {
 
     return (
       <ThemeProvider theme={theme}>
-        <Box p={2}>
+        <Box p={2} style={{ paddingRight: '55px' }}>
           <CssBaseline />
           <Snackbar
             open={snackbarOpen}
@@ -202,71 +204,75 @@ class WelcomePage extends React.Component {
             </Alert>
           </Snackbar>
           <img src={logo} alt="Logo" className="logo" />
-            <Grid container justify="center" spacing={5}>
-              <Grid item xs={12} md lg={3}>
-                <Card className="card" raised>
-                  <CardHeader title="Step 1" className="header" />
-                  <CardContent>
-                    <Typography variant="body1">
-                      Go to&nbsp;
+          <Grid container justify="center" spacing={5} style={{ maxWidth: '1500px', margin: 'auto' }}>
+            <Grid item xs={12} md={4} lg>
+              <Card className="card" raised>
+                <CardHeader title="Step 1" className="header" />
+                <CardContent>
+                  <Typography variant="body1">
+                    Go to&nbsp;
                     <Link href="https://quest.pecs.uwaterloo.ca/psp/SS/ACADEMIC/SA/?cmd=login&languageCd=ENG" target="_blank">Quest</Link>
-                      &nbsp;and click &quot;Class Schedule&quot;.
+                    &nbsp;, click &quot;Class Schedule&quot;.
                   </Typography>
-                  </CardContent>
-                  <CardMedia
-                    image={step1}
-                    title="Go to Class Schedule"
-                    className="step-img"
-                  />
-                </Card>
-              </Grid>
-              <Grid item xs={12} md lg={3}>
-                <Card className="card" raised style={{display: 'flex', flexDirection: 'column', height: '100%'}}>
-                  <CardHeader title="Step 2" className="header" />
-                  <CardContent>
-                    <Typography variant="body1">Choose your term, select all and copy.</Typography>
-                  </CardContent>
-                  <CardMedia
-                    image={step2}
-                    title="Select All and Copy"
-                    className="step-img stick-bottom"
-                  />
-                </Card>
-              </Grid>
-              <Grid item xs={12} md lg={3}>
-      
-                <Card raised style={{  display: 'flex', flexDirection: 'column', height: '100%' }}>
-                  <CardHeader title="Step 3" className="header" />
-                  <CardContent style={{ display: 'flex', flexDirection: 'column', flexGrow:1 ,paddingBottom: "16px" }}>
-                    <Box mb={2}>
-                      <Typography variant="body1">Paste into the box below.</Typography>
-                    </Box>
-                    
-                    <TextField style={{flexGrow:1}}
-                      value={rawCourses}
-                      onPaste={(e) => this.handlePaste(e.clipboardData.getData('text/plain'))}
-                      multiline
-                      required
-                      variant="outlined"
-                      fullWidth
-                      rows={12}
-                      onChange={(e) => this.handleRawCoursesInputChange(e.target.value)}
-                      InputProps={{
-                        style: {
-                          height:"100%"
-                        }
-                      }}
-                      inputProps={{
-                        style: {
-                          height:"100%"
-                        }
-                      }}
-                    />
-     
-                  </CardContent>
-                </Card>
-              </Grid>
+                </CardContent>
+                <CardMedia
+                  image={step1}
+                  title="Go to Class Schedule"
+                  className="step-img"
+                />
+              </Card>
             </Grid>
+            <Grid item xs={12} md={4} lg>
+              <Card className="card" raised style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                <CardHeader title="Step 2" className="header" />
+                <CardContent>
+                  <Typography variant="body1">Choose your term, select all and copy.</Typography>
+                </CardContent>
+                <CardMedia
+                  image={step2}
+                  title="Select All and Copy"
+                  className="step-img stick-bottom"
+                />
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={4} lg>
+
+              <Card className="card" raised style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                <CardHeader title="Step 3" className="header" />
+                <CardContent style={{
+                  display: 'flex', flexDirection: 'column', flexGrow: 1, paddingBottom: '16px',
+                }}
+                >
+                  <Box mb={2}>
+                    <Typography variant="body1">Paste into the box below.</Typography>
+                  </Box>
+
+                  <TextField
+                    style={{ flexGrow: 1 }}
+                    value={rawCourses}
+                    onPaste={(e) => this.handlePaste(e.clipboardData.getData('text/plain'))}
+                    multiline
+                    required
+                    variant="outlined"
+                    fullWidth
+                    rows={12}
+                    onChange={(e) => this.handleRawCoursesInputChange(e.target.value)}
+                    InputProps={{
+                      style: {
+                        height: '100%',
+                      },
+                    }}
+                    inputProps={{
+                      style: {
+                        height: '100%',
+                      },
+                    }}
+                  />
+
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
         </Box>
         <Backdrop
           style={{
@@ -282,7 +288,7 @@ class WelcomePage extends React.Component {
           <DialogContent>
             <DialogContentText>
               Please enter your UWaterloo ID for a chance win a prize!
-                        </DialogContentText>
+            </DialogContentText>
             <TextField
               autoFocus
               margin="dense"
@@ -296,10 +302,10 @@ class WelcomePage extends React.Component {
           <DialogActions>
             <Button onClick={this.handleDialogClose} color="primary">
               Cancel
-                        </Button>
+            </Button>
             <Button onClick={this.handleSubmitClick} color="primary">
               Submit
-                        </Button>
+            </Button>
           </DialogActions>
         </Dialog>
       </ThemeProvider>
