@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/schedule-planner-data-collection/static/css/main.6fc4887a.chunk.css",
-    "main.js": "/schedule-planner-data-collection/static/js/main.e4188123.chunk.js",
-    "main.js.map": "/schedule-planner-data-collection/static/js/main.e4188123.chunk.js.map",
+    "main.css": "/schedule-planner-data-collection/static/css/main.f727d70d.chunk.css",
+    "main.js": "/schedule-planner-data-collection/static/js/main.450d4b44.chunk.js",
+    "main.js.map": "/schedule-planner-data-collection/static/js/main.450d4b44.chunk.js.map",
     "runtime-main.js": "/schedule-planner-data-collection/static/js/runtime-main.14557f9c.js",
     "runtime-main.js.map": "/schedule-planner-data-collection/static/js/runtime-main.14557f9c.js.map",
-    "static/js/2.bed1b02c.chunk.js": "/schedule-planner-data-collection/static/js/2.bed1b02c.chunk.js",
-    "static/js/2.bed1b02c.chunk.js.map": "/schedule-planner-data-collection/static/js/2.bed1b02c.chunk.js.map",
+    "static/js/2.bc65eb10.chunk.js": "/schedule-planner-data-collection/static/js/2.bc65eb10.chunk.js",
+    "static/js/2.bc65eb10.chunk.js.map": "/schedule-planner-data-collection/static/js/2.bc65eb10.chunk.js.map",
     "index.html": "/schedule-planner-data-collection/index.html",
-    "precache-manifest.cb6b06d7fcc9e1b6ba146c98e092fef7.js": "/schedule-planner-data-collection/precache-manifest.cb6b06d7fcc9e1b6ba146c98e092fef7.js",
+    "precache-manifest.67a97ffda52382799265aba66da88522.js": "/schedule-planner-data-collection/precache-manifest.67a97ffda52382799265aba66da88522.js",
     "service-worker.js": "/schedule-planner-data-collection/service-worker.js",
-    "static/css/main.6fc4887a.chunk.css.map": "/schedule-planner-data-collection/static/css/main.6fc4887a.chunk.css.map",
-    "static/js/2.bed1b02c.chunk.js.LICENSE": "/schedule-planner-data-collection/static/js/2.bed1b02c.chunk.js.LICENSE",
+    "static/css/main.f727d70d.chunk.css.map": "/schedule-planner-data-collection/static/css/main.f727d70d.chunk.css.map",
+    "static/js/2.bc65eb10.chunk.js.LICENSE": "/schedule-planner-data-collection/static/js/2.bc65eb10.chunk.js.LICENSE",
     "static/media/calendar-step-1.png": "/schedule-planner-data-collection/static/media/calendar-step-1.5a0cc442.png",
     "static/media/calendar-step-2.png": "/schedule-planner-data-collection/static/media/calendar-step-2.514203ac.png",
     "static/media/icon.svg": "/schedule-planner-data-collection/static/media/icon.a7b1598b.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.14557f9c.js",
-    "static/js/2.bed1b02c.chunk.js",
-    "static/css/main.6fc4887a.chunk.css",
-    "static/js/main.e4188123.chunk.js"
+    "static/js/2.bc65eb10.chunk.js",
+    "static/css/main.f727d70d.chunk.css",
+    "static/js/main.450d4b44.chunk.js"
   ]
 }
