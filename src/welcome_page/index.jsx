@@ -124,17 +124,6 @@ class WelcomePage extends React.Component {
     this.setState({ rawCourses });
   }
 
-  handleNextStepClick = () => {
-    this.hideSnackbar();
-    const { rawCourses } = this.state;
-    try {
-      this.parseCourses(rawCourses);
-    } catch (error) {
-      console.log(error);
-      this.showSnackbar('warning', snackbarWarningText);
-    }
-  }
-
   handleEmailAddressChange = (val) => {
     this.setState({ questId: val });
   }
