@@ -18,13 +18,18 @@ import {
 import { blue, pink } from '@material-ui/core/colors';
 import axios from 'axios';
 
+const getSchedUrl = 'https://qemn8c6rx9.execute-api.us-east-2.amazonaws.com/test/returnscheduleforrating';
+
 const useStyles = makeStyles((theme) => ({
   contents: {
     display: 'flex',
   },
   tabs: {
     borderRight: `1px solid ${theme.palette.divider}`,
+    flexShrink: 0,
     height: '100%',
+    paddingBottom: theme.spacing(2),
+    paddingTop: theme.spacing(2),
   },
 }));
 
@@ -43,20 +48,33 @@ const theme = createMuiTheme({
   },
 });
 
+/*
+0   terrible
+20  bad
+40  below average
+60  above average
+80  good
+100 excellent
+*/
+
 function SchedulePage() {
   const classes = useStyles();
 
+  // UI states
   const [instrModalOpen, setInstrModalOpen] = useState(true);
+  const [selectedSchedIndex, setSelectedSchedIndex] = useState(0);
+
+  // Data states
+  const [schedules, setSchedules] = useState([]);
 
   useEffect(
     () => {
       const loadSchedules = async () => {
-        const url = 'https://qemn8c6rx9.execute-api.us-east-2.amazonaws.com/test/getrandomschedule';
         try {
-          const response = await axios.get(url, { timeout: 5000 });
-          console.log(response);
+          const response = await axios.get(getSchedUrl, { timeout: 5000 });
+          setSchedules(response.data);
         } catch (error) {
-          console.log(error);
+          console.log(error.message);
         }
       };
       // loadSchedules(); // TODO: uncomment this
@@ -65,6 +83,8 @@ function SchedulePage() {
   );
 
   const closeInstrModal = () => setInstrModalOpen(false);
+
+  const handelTabChange = (_event, newValue) => setSelectedSchedIndex(newValue);
 
   return (
     <ThemeProvider theme={theme}>
@@ -81,18 +101,19 @@ function SchedulePage() {
         <Hidden xsDown>
           {/* TODO: make horizontal Tabs in AppBar for xs */}
           <Tabs
-            value={0}
+            value={selectedSchedIndex}
+            onChange={handelTabChange}
             indicatorColor="primary"
             textColor="primary"
             orientation="vertical"
             className={classes.tabs}
           >
-            <Tab label="Schedule 1" />
-            <Tab label="Schedule 2" />
-            <Tab label="Schedule 3" />
+            {schedules.map((_value, index) => (
+              <Tab label={`Schedule ${index + 1}`} />
+            ))}
           </Tabs>
         </Hidden>
-        <Typography variant="body1">Hello, world!</Typography>
+        <Typography variant="body1">{JSON.stringify(schedules)}</Typography>
       </div>
 
       <Modal
@@ -105,7 +126,7 @@ function SchedulePage() {
       >
         <Fade in={instrModalOpen}>
           <Paper>
-          Welcome
+            Welcome
             <Button onClick={closeInstrModal}>Get started</Button>
           </Paper>
         </Fade>
