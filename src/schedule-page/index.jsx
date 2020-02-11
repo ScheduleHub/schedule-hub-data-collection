@@ -22,6 +22,8 @@ import {
   StepLabel,
   StepConnector,
   StepContent,
+  Container,
+  Grid,
 } from '@material-ui/core';
 import { blue, pink } from '@material-ui/core/colors';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
@@ -59,8 +61,8 @@ const useStyles = makeStyles((theme) => ({
     borderTop: `1px solid ${theme.palette.divider}`,
   },
   verticalStepper: {
+    alignSelf: 'flex-start',
     borderRight: `1px solid ${theme.palette.divider}`,
-    height: 'auto',
     paddingBottom: theme.spacing(2),
     paddingTop: theme.spacing(2),
   },
@@ -149,13 +151,19 @@ function SchedulePage() {
 
   const handleNextClick = () => setSelectedSchedIndex((prevSelected) => prevSelected + 1);
 
-  const createStep = (key, label, instr) => (
+  const createStep = (key, index, label, instr) => (
     <Step key={key}>
       <StepLabel>{label}</StepLabel>
       <StepContent>
         <Typography>{instr}</Typography>
         <Box my={2}>
-          <Button className={classes.verticalStepperButton} onClick={handleBackClick}>Back</Button>
+          <Button
+            className={classes.verticalStepperButton}
+            onClick={handleBackClick}
+            disabled={index === 0}
+          >
+            Back
+          </Button>
           <Button
             variant="contained"
             color="primary"
@@ -172,6 +180,7 @@ function SchedulePage() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+
       <div className={classes.root}>
         <AppBar position="static" color="primary" className={classes.appBar}>
           <Toolbar>
@@ -179,43 +188,49 @@ function SchedulePage() {
           </Toolbar>
           {/* <Hidden smUp>
             <HorizontalTabs
-              value={selectedSchedIndex}
-              onChange={handelTabChange}
-              variant="scrollable"
-              scrollButtons="auto"
-              className={classes.horizontalTabs}
+            value={selectedSchedIndex}
+            onChange={handelTabChange}
+            variant="scrollable"
+            scrollButtons="auto"
+            className={classes.horizontalTabs}
             >
-              {createSchedTabs()}
+            {createSchedTabs()}
             </HorizontalTabs>
           </Hidden> */}
         </AppBar>
 
-        <div className={classes.contents}>
-          <Hidden smDown>
-            <Stepper
-              activeStep={selectedSchedIndex}
-              orientation="vertical"
-              className={classes.verticalStepper}
-              connector={<StepConnector className={classes.verticalStepConnector} />}
-            >
-              {schedules.map((value, index) => (
-                createStep(
-                  value.id,
-                  `Schedule ${index + 1}`,
-                  'Read the schedule and rate its timing.',
-                )
-              ))}
-              <Step>
-                <StepLabel>Enter the Price Draw</StepLabel>
-              </Step>
-            </Stepper>
-          </Hidden>
-          <Box p={2}>
-            {schedules.map((value, index) => (selectedSchedIndex === index && (
-              <Timetable key={value.id} schedule={value.schedule} />
-            )))}
-          </Box>
-        </div>
+        <Container maxWidth="xl" className={classes.contents}>
+          {/* <div className={classes.contents}> */}
+            <Hidden smDown>
+              <Stepper
+                activeStep={selectedSchedIndex}
+                orientation="vertical"
+                className={classes.verticalStepper}
+                connector={<StepConnector className={classes.verticalStepConnector} />}
+              >
+                {schedules.map((value, index) => (
+                  createStep(
+                    value.id,
+                    index,
+                    `Schedule ${index + 1}`,
+                    'Read the schedule and rate its timing.',
+                  )
+                ))}
+                <Step>
+                  <StepLabel>Enter the Price Draw</StepLabel>
+                </Step>
+              </Stepper>
+            </Hidden>
+
+            <Box p={2}>
+              {schedules.map((value, index) => (selectedSchedIndex === index && (
+                <Timetable key={value.id} schedule={value.schedule} />
+              )))}
+            </Box>
+
+          {/* </div> */}
+        </Container>
+
         <Hidden mdUp>
           <MobileStepper
             variant="dots"
