@@ -6,6 +6,7 @@ import {
   CssBaseline,
   Fade,
   Hidden,
+  MobileStepper,
   Modal,
   Paper,
   Tab,
@@ -18,6 +19,7 @@ import {
   withStyles,
 } from '@material-ui/core';
 import { blue, pink } from '@material-ui/core/colors';
+import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import axios from 'axios';
 import logo from 'res/icon.svg';
 import Timetable from 'components/Timetable';
@@ -46,6 +48,9 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     outline: 'none',
     padding: theme.spacing(2),
+  },
+  mobileStepper: {
+    borderTop: `1px solid ${theme.palette.divider}`,
   },
   tabs: {
     borderRight: `1px solid ${theme.palette.divider}`,
@@ -172,6 +177,27 @@ function SchedulePage() {
             )))}
           </Box>
         </div>
+        <Hidden smUp>
+          <MobileStepper
+            variant="dots"
+            steps={schedules.length}
+            position="bottom"
+            className={classes.mobileStepper}
+            activeStep={selectedSchedIndex}
+            nextButton={(
+              <Button size="medium">
+                Next
+                <KeyboardArrowRight />
+              </Button>
+            )}
+            backButton={(
+              <Button size="medium">
+                <KeyboardArrowLeft />
+                Back
+              </Button>
+            )}
+          />
+        </Hidden>
       </div>
 
       <Modal
@@ -190,6 +216,7 @@ function SchedulePage() {
             <Typography gutterBottom align="center">
               You will be given 5 class schedules.
               Please rate each schedule based on its timing (not the subjects).
+              After that, you can enter your UWaterloo email for a chance to win a prize!
             </Typography>
             <Box mt={2} mx="auto">
               <Button variant="outlined" color="primary" onClick={closeInstrModal}>Get started</Button>
