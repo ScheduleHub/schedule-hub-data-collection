@@ -15,14 +15,11 @@ import {
   StepConnector,
   StepContent,
   StepLabel,
-  Tab,
-  Tabs,
   ThemeProvider,
   Toolbar,
   Typography,
   createMuiTheme,
   makeStyles,
-  withStyles,
   Step,
 } from '@material-ui/core';
 import { blue, pink } from '@material-ui/core/colors';
@@ -43,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     flexGrow: 1,
-    overflowX: 'auto',
+    overflow: 'scroll',
   },
   instrModal: {
     alignItems: 'center',
@@ -64,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
     alignSelf: 'flex-start',
     paddingBottom: theme.spacing(2),
     paddingTop: theme.spacing(2),
-    width: '20%',
+    width: '25%',
   },
   verticalStepperButton: {
     marginRight: theme.spacing(1),
@@ -137,9 +134,6 @@ function SchedulePage() {
 
   const closeInstrModal = () => setInstrModalOpen(false);
 
-
-  const handelTabChange = (_event, newValue) => setSelectedSchedIndex(newValue);
-
   const handleBackClick = () => setSelectedSchedIndex((prevSelected) => prevSelected - 1);
 
   const handleNextClick = () => setSelectedSchedIndex((prevSelected) => prevSelected + 1);
@@ -179,47 +173,33 @@ function SchedulePage() {
           <Toolbar>
             <Typography variant="h6">Schedule Planner Data Collection</Typography>
           </Toolbar>
-          {/* <Hidden smUp>
-            <HorizontalTabs
-            value={selectedSchedIndex}
-            onChange={handelTabChange}
-            variant="scrollable"
-            scrollButtons="auto"
-            className={classes.horizontalTabs}
-            >
-            {createSchedTabs()}
-            </HorizontalTabs>
-          </Hidden> */}
         </AppBar>
 
         <Container maxWidth="xl" className={classes.contents}>
-          <div className={classes.contents}>
-            <Hidden smDown>
-              <Stepper
-                activeStep={selectedSchedIndex}
-                orientation="vertical"
-                className={classes.verticalStepper}
-                connector={<StepConnector className={classes.verticalStepConnector} />}
-              >
-                {schedules.map((value, index) => (
-                  createStep(
-                    value.id,
-                    `Schedule ${index + 1}`,
-                    'Read the schedule and rate its timing.',
-                  )
-                ))}
-                {createStep('priceDraw', 'Enter the Price Draw')}
-              </Stepper>
-              <Divider orientation="vertical" />
-            </Hidden>
-
-            <Box p={2}>
-              {schedules.map((value, index) => (selectedSchedIndex === index && (
-                <Timetable key={value.id} schedule={value.schedule} />
-              )))}
-            </Box>
-
-          </div>
+          <Hidden smDown>
+            <Stepper
+              activeStep={selectedSchedIndex}
+              orientation="vertical"
+              className={classes.verticalStepper}
+              connector={<StepConnector className={classes.verticalStepConnector} />}
+            >
+              {schedules.map((value, index) => (
+                createStep(
+                  value.id,
+                  `Schedule ${index + 1}`,
+                  'Read the schedule and rate its timing.',
+                )
+              ))}
+              {createStep('priceDraw', 'Enter the Price Draw')}
+            </Stepper>
+            <Divider orientation="vertical" />
+          </Hidden>
+          <Box>
+            {/* TODO: fix padding on phones */}
+            {schedules.map((value, index) => (selectedSchedIndex === index && (
+              <Timetable key={value.id} schedule={value.schedule} />
+            )))}
+          </Box>
         </Container>
 
         <Hidden mdUp>
@@ -230,13 +210,17 @@ function SchedulePage() {
             className={classes.mobileStepper}
             activeStep={selectedSchedIndex}
             nextButton={(
-              <Button size="medium">
+              <Button size="medium" onClick={handleNextClick}>
                 Next
                 <KeyboardArrowRight />
               </Button>
             )}
             backButton={(
-              <Button size="medium">
+              <Button
+                size="medium"
+                onClick={handleBackClick}
+                disabled={selectedSchedIndex === 0}
+              >
                 <KeyboardArrowLeft />
                 Back
               </Button>
