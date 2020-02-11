@@ -3,13 +3,18 @@ import {
   AppBar,
   Box,
   Button,
+  Container,
   CssBaseline,
+  Divider,
   Fade,
   Hidden,
   MobileStepper,
   Modal,
   Paper,
   Stepper,
+  StepConnector,
+  StepContent,
+  StepLabel,
   Tab,
   Tabs,
   ThemeProvider,
@@ -19,11 +24,6 @@ import {
   makeStyles,
   withStyles,
   Step,
-  StepLabel,
-  StepConnector,
-  StepContent,
-  Container,
-  Grid,
 } from '@material-ui/core';
 import { blue, pink } from '@material-ui/core/colors';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
@@ -62,15 +62,12 @@ const useStyles = makeStyles((theme) => ({
   },
   verticalStepper: {
     alignSelf: 'flex-start',
-    borderRight: `1px solid ${theme.palette.divider}`,
     paddingBottom: theme.spacing(2),
     paddingTop: theme.spacing(2),
+    width: '20%',
   },
   verticalStepperButton: {
     marginRight: theme.spacing(1),
-  },
-  verticalStepConnector: {
-    height: 'initial',
   },
   welcomeLogo: {
     display: 'block',
@@ -82,11 +79,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HorizontalTabs = withStyles((theme) => ({
-  indicator: { backgroundColor: theme.palette.common.white },
-}))(Tabs);
-
-const theme = createMuiTheme({
+const spdcTheme = createMuiTheme({
   palette: {
     primary: {
       main: pink[300],
@@ -151,7 +144,7 @@ function SchedulePage() {
 
   const handleNextClick = () => setSelectedSchedIndex((prevSelected) => prevSelected + 1);
 
-  const createStep = (key, index, label, instr) => (
+  const createStep = (key, label, instr) => (
     <Step key={key}>
       <StepLabel>{label}</StepLabel>
       <StepContent>
@@ -160,7 +153,7 @@ function SchedulePage() {
           <Button
             className={classes.verticalStepperButton}
             onClick={handleBackClick}
-            disabled={index === 0}
+            disabled={selectedSchedIndex === 0}
           >
             Back
           </Button>
@@ -178,7 +171,7 @@ function SchedulePage() {
   );
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={spdcTheme}>
       <CssBaseline />
 
       <div className={classes.root}>
@@ -200,7 +193,7 @@ function SchedulePage() {
         </AppBar>
 
         <Container maxWidth="xl" className={classes.contents}>
-          {/* <div className={classes.contents}> */}
+          <div className={classes.contents}>
             <Hidden smDown>
               <Stepper
                 activeStep={selectedSchedIndex}
@@ -211,15 +204,13 @@ function SchedulePage() {
                 {schedules.map((value, index) => (
                   createStep(
                     value.id,
-                    index,
                     `Schedule ${index + 1}`,
                     'Read the schedule and rate its timing.',
                   )
                 ))}
-                <Step>
-                  <StepLabel>Enter the Price Draw</StepLabel>
-                </Step>
+                {createStep('priceDraw', 'Enter the Price Draw')}
               </Stepper>
+              <Divider orientation="vertical" />
             </Hidden>
 
             <Box p={2}>
@@ -228,7 +219,7 @@ function SchedulePage() {
               )))}
             </Box>
 
-          {/* </div> */}
+          </div>
         </Container>
 
         <Hidden mdUp>
