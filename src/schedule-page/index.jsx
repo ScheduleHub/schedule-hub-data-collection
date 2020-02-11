@@ -9,6 +9,7 @@ import {
   MobileStepper,
   Modal,
   Paper,
+  Stepper,
   Tab,
   Tabs,
   ThemeProvider,
@@ -17,6 +18,10 @@ import {
   createMuiTheme,
   makeStyles,
   withStyles,
+  Step,
+  StepLabel,
+  StepConnector,
+  StepContent,
 } from '@material-ui/core';
 import { blue, pink } from '@material-ui/core/colors';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
@@ -34,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
   contents: {
     display: 'flex',
+    flexDirection: 'row',
     flexGrow: 1,
     overflowX: 'auto',
   },
@@ -52,12 +58,17 @@ const useStyles = makeStyles((theme) => ({
   mobileStepper: {
     borderTop: `1px solid ${theme.palette.divider}`,
   },
-  tabs: {
+  verticalStepper: {
     borderRight: `1px solid ${theme.palette.divider}`,
-    flexShrink: 0,
-    height: '100%',
+    height: 'auto',
     paddingBottom: theme.spacing(2),
     paddingTop: theme.spacing(2),
+  },
+  verticalStepperButton: {
+    marginRight: theme.spacing(1),
+  },
+  verticalStepConnector: {
+    height: 'initial',
   },
   welcomeLogo: {
     display: 'block',
@@ -131,11 +142,32 @@ function SchedulePage() {
 
   const closeInstrModal = () => setInstrModalOpen(false);
 
-  const createSchedTabs = () => schedules.map((value, index) => (
-    <Tab key={value.id} label={`Schedule ${index + 1}`} />
-  ));
 
   const handelTabChange = (_event, newValue) => setSelectedSchedIndex(newValue);
+
+  const handleBackClick = () => setSelectedSchedIndex((prevSelected) => prevSelected - 1);
+
+  const handleNextClick = () => setSelectedSchedIndex((prevSelected) => prevSelected + 1);
+
+  const createStep = (key, label, instr) => (
+    <Step key={key}>
+      <StepLabel>{label}</StepLabel>
+      <StepContent>
+        <Typography>{instr}</Typography>
+        <Box my={2}>
+          <Button className={classes.verticalStepperButton} onClick={handleBackClick}>Back</Button>
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.verticalStepperButton}
+            onClick={handleNextClick}
+          >
+            Next
+          </Button>
+        </Box>
+      </StepContent>
+    </Step>
+  );
 
   return (
     <ThemeProvider theme={theme}>
@@ -145,7 +177,7 @@ function SchedulePage() {
           <Toolbar>
             <Typography variant="h6">Schedule Planner Data Collection</Typography>
           </Toolbar>
-          <Hidden smUp>
+          {/* <Hidden smUp>
             <HorizontalTabs
               value={selectedSchedIndex}
               onChange={handelTabChange}
@@ -155,21 +187,28 @@ function SchedulePage() {
             >
               {createSchedTabs()}
             </HorizontalTabs>
-          </Hidden>
+          </Hidden> */}
         </AppBar>
 
         <div className={classes.contents}>
-          <Hidden xsDown>
-            <Tabs
-              value={selectedSchedIndex}
-              onChange={handelTabChange}
-              indicatorColor="primary"
-              textColor="primary"
+          <Hidden smDown>
+            <Stepper
+              activeStep={selectedSchedIndex}
               orientation="vertical"
-              className={classes.tabs}
+              className={classes.verticalStepper}
+              connector={<StepConnector className={classes.verticalStepConnector} />}
             >
-              {createSchedTabs()}
-            </Tabs>
+              {schedules.map((value, index) => (
+                createStep(
+                  value.id,
+                  `Schedule ${index + 1}`,
+                  'Read the schedule and rate its timing.',
+                )
+              ))}
+              <Step>
+                <StepLabel>Enter the Price Draw</StepLabel>
+              </Step>
+            </Stepper>
           </Hidden>
           <Box p={2}>
             {schedules.map((value, index) => (selectedSchedIndex === index && (
@@ -177,7 +216,7 @@ function SchedulePage() {
             )))}
           </Box>
         </div>
-        <Hidden smUp>
+        <Hidden mdUp>
           <MobileStepper
             variant="dots"
             steps={schedules.length}
@@ -201,7 +240,7 @@ function SchedulePage() {
       </div>
 
       <Modal
-        open={instrModalOpen}
+        open={instrModalOpen && false}
         onClose={closeInstrModal}
         BackdropProps={{ timeout: 500 }}
         className={classes.instrModal}
