@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     flexGrow: 1,
-    overflow: 'scroll',
+    overflowX: 'auto',
   },
   instrModal: {
     alignItems: 'center',
