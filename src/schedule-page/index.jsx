@@ -35,12 +35,13 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
+    overflowY: 'hidden',
   },
   contents: {
     display: 'flex',
     flexDirection: 'row',
     flexGrow: 1,
-    overflowX: 'auto',
+    overflowX: 'hidden',
   },
   instrModal: {
     alignItems: 'center',
@@ -53,6 +54,16 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     outline: 'none',
     padding: theme.spacing(2),
+  },
+  mainContents: {
+    flexGrow: 1,
+    overflow: 'hidden',
+  },
+  timetableContainer: {
+    // TODO: change the size
+    width: 720,
+    height: 540,
+    overflow: 'auto',
   },
   mobileStepper: {
     borderTop: `1px solid ${theme.palette.divider}`,
@@ -194,11 +205,13 @@ function SchedulePage() {
             </Stepper>
             <Divider orientation="vertical" />
           </Hidden>
-          <Box>
+          <Box className={classes.mainContents}>
             {/* TODO: fix padding on phones */}
-            {schedules.map((value, index) => (selectedSchedIndex === index && (
+            <Box className={classes.timetableContainer}>
+              {schedules.map((value, index) => (selectedSchedIndex === index && (
               <Timetable key={value.id} schedule={value.schedule} />
-            )))}
+              )))}
+            </Box>
           </Box>
         </Container>
 

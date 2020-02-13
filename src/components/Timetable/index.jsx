@@ -4,41 +4,58 @@ import { makeStyles, Box, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    // display: 'flex',
-    // height: 800,
-    // width: 1000,
+    display: 'table',
+    height: '100%',
+    width: '100%',
   },
-  hourHeaders: {
-    '& *': {
-      borderBottom: `1px solid ${theme.palette.divider}`,
-      height: 64,
-      padding: theme.spacing(1),
-    },
-    '& *:first-child': {
+  weekdayRow: {
+    display: 'table-row',
+    '& > *': {
+      display: 'table-cell',
+      position: 'sticky',
+      top: 0,
+      zIndex: 3,
+      backgroundColor: theme.palette.primary.light,
       borderTop: `1px solid ${theme.palette.divider}`,
-    },
-  },
-  weekdayHeaders: {
-    display: 'flex',
-    '& *': {
+      borderBottom: `1px solid ${theme.palette.divider}`,
       borderRight: `1px solid ${theme.palette.divider}`,
       padding: theme.spacing(1),
       width: 144,
+      minWidth: 144,
     },
-    '& *:first-child': {
+    '& > *:first-child': {
+      left: 0,
+      zIndex: 4,
+      backgroundColor: theme.palette.secondary.main,
       borderLeft: `1px solid ${theme.palette.divider}`,
       width: 96,
+      minWidth: 96,
+    },
+  },
+  scheduleRow: {
+    display: 'table-row',
+    '& > *': {
+      display: 'table-cell',
+      borderBottom: `1px solid ${theme.palette.divider}`
     },
   },
   timeColumn: {
-    flexGrow: 1,
-  },
-  days: {
-    display: 'flex',
-    flexGrow: 1,
+    position: 'sticky',
+    left: 0,
+    zIndex: 2,
+    backgroundColor: theme.palette.primary.light,
+    borderLeft: `1px solid ${theme.palette.divider}`,
+    borderRight: `1px solid ${theme.palette.divider}`,
+    width: 96,
+    minWidth: 96,
+    '& > *': {
+      padding: theme.spacing(1),
+    },
   },
   dayColumn: {
     width: 144,
+    minWidth: 144,
+    borderRight: `1px solid ${theme.palette.divider}`,
   },
 }));
 
@@ -61,23 +78,21 @@ function Timetable(props) {
   return (
     // TODO: make the actual timetable
     <div className={classes.root}>
-      <Box className={classes.weekdayHeaders}>
+      <Box className={classes.weekdayRow}>
         <Box />
         {weekdays.map((value) => (
           <Typography variant="subtitle2">{value}</Typography>
         ))}
       </Box>
-      <Box className={classes.hourHeaders}>
-        {hours.map((value) => (
-          <Typography variant="subtitle2">{value}</Typography>
+      <Box className={classes.scheduleRow}>
+        <Box className={classes.timeColumn}>
+          {hours.map((value) => (
+            <Typography variant="subtitle2">{value}</Typography>
+          ))}
+        </Box>
+        {weekdays.map((value) => (
+          <Box className={classes.dayColumn}>{value}</Box>
         ))}
-      </Box>
-      <Box className={classes.days}>
-        <Box height="100%" width="20%" className={classes.dayColumn} style={{ backgroundColor: '#f00' }}>1</Box>
-        <Box height="100%" width="20%" className={classes.dayColumn} style={{ backgroundColor: '#ff0' }}>1</Box>
-        <Box height="100%" width="20%" className={classes.dayColumn} style={{ backgroundColor: '#f0f' }}>1</Box>
-        <Box height="100%" width="20%" className={classes.dayColumn} style={{ backgroundColor: '#00f' }}>1</Box>
-        <Box height="100%" width="20%" className={classes.dayColumn} style={{ backgroundColor: '#0f0' }}>1</Box>
       </Box>
     </div>
   );
