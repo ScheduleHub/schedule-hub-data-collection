@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  makeStyles, Box, Typography, Backdrop,
+  makeStyles, Box, Typography,
 } from '@material-ui/core';
 import { parseTime } from 'utils/courses';
 import TimeBlock from './TimeBlock';
@@ -81,11 +81,11 @@ const shortWeekdays = ['M', 'T', 'W', 'Th', 'F'];
 
 function Timetable(props) {
   const classes = useStyles();
-  
+
   const { schedule } = props;
+  console.log(schedule);
 
   const blocks = (schedule || []).map(parseTime).flat();
-  console.log(blocks);
 
   return (
     // TODO: make the actual timetable
@@ -93,19 +93,19 @@ function Timetable(props) {
       <Box className={classes.weekdayRow}>
         <Box />
         {weekdays.map((value) => (
-          <Typography variant="subtitle2">{value}</Typography>
+          <Typography variant="subtitle2" key={value}>{value}</Typography>
         ))}
       </Box>
       <Box className={classes.scheduleRow}>
         <Box className={classes.timeColumn}>
           {hours.map((value) => (
-            <Typography variant="subtitle2">{value}</Typography>
+            <Typography variant="subtitle2" key={value}>{value}</Typography>
           ))}
         </Box>
         {shortWeekdays.map((day) => (
-          <Box className={classes.dayColumn}>
+          <Box className={classes.dayColumn} key={day}>
             {blocks.filter((b) => b.day === day).map((b) => (
-              <TimeBlock startTime={b.startTime} endTime={b.endTime} blockInfo={b.blockInfo} />
+              <TimeBlock key={`${day}${b.startTime}`} startTime={b.startTime} endTime={b.endTime} blockInfo={b.blockInfo} />
             ))}
           </Box>
         ))}
@@ -115,7 +115,20 @@ function Timetable(props) {
 }
 
 Timetable.propTypes = {
-  schedule: PropTypes.arrayOf(PropTypes.array).isRequired,
+  schedule: PropTypes.arrayOf(PropTypes.shape({
+    day: PropTypes.string,
+    startTime: PropTypes.string,
+    endTime: PropTypes.string,
+    blockInfo: PropTypes.shape({
+      courseCode: PropTypes.string,
+      sectionType: PropTypes.string,
+      sectionNum: PropTypes.string,
+    }),
+  })),
+};
+
+Timetable.defaultProps = {
+  schedule: [],
 };
 
 export default Timetable;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   AppBar,
   Box,
@@ -66,6 +66,12 @@ const useStyles = makeStyles((theme) => ({
     color: '#fff',
   },
   mainContents: {
+    [theme.breakpoints.down('sm')]: {
+      padding: 0,
+    },
+    [theme.breakpoints.up('md')]: {
+      padding: theme.spacing(2),
+    },
     flexGrow: 1,
     overflow: 'hidden',
   },
@@ -163,6 +169,7 @@ function SchedulePage() {
         try {
           const response = await axios.get(getSchedUrl, { timeout: 5000 });
           const { data } = response;
+          console.log(data);
           setSchedules(data);
           data.forEach((sched, index) => loadApiSchedules(sched.schedule, index));
         } catch (error) {
@@ -240,7 +247,7 @@ function SchedulePage() {
             </Stepper>
             <Divider orientation="vertical" />
           </Hidden>
-          <Box className={classes.mainContents} p={2}>
+          <Box className={classes.mainContents}>
             {/* TODO: fix padding on phones */}
             <Box className={classes.timetableContainer}>
               <Timetable schedule={classesInfo[selectedSchedIndex]} />

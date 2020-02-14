@@ -24,7 +24,11 @@ const useStyles = makeStyles((theme) => ({
 const propTypes = {
   startTime: PropTypes.string.isRequired,
   endTime: PropTypes.string.isRequired,
-  blockInfo: PropTypes.shape({ courseCode: PropTypes.string.isRequired }).isRequired,
+  blockInfo: PropTypes.shape({
+    courseCode: PropTypes.string.isRequired,
+    sectionType: PropTypes.string.isRequired,
+    sectionNum: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 function TimeBlock(props) {
