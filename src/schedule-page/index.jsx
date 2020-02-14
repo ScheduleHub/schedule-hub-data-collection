@@ -48,6 +48,9 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     flexGrow: 1,
     overflowX: 'hidden',
+    [theme.breakpoints.down('xs')]: {
+      padding: 0,
+    },
   },
   instrModal: {
     alignItems: 'center',
@@ -224,7 +227,7 @@ function SchedulePage() {
           </Toolbar>
         </AppBar>
 
-        <Backdrop open={classesInfo.some((item) => !item)} className={classes.loadingFullPage}>
+        <Backdrop open={!classesInfo[selectedSchedIndex]} className={classes.loadingFullPage}>
           <CircularProgress color="inherit" />
         </Backdrop>
 
@@ -301,7 +304,9 @@ function SchedulePage() {
               After that, you can enter your UWaterloo email for a chance to win a prize!
             </Typography>
             <Box mt={2} mx="auto">
-              <Button variant="outlined" color="primary" onClick={closeInstrModal}>Get started</Button>
+              <Button variant="outlined" color="primary" onClick={closeInstrModal}>
+                Get started
+              </Button>
             </Box>
           </Paper>
         </Fade>

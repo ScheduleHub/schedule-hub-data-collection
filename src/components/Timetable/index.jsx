@@ -4,74 +4,67 @@ import {
   makeStyles, Box, Typography,
 } from '@material-ui/core';
 import { parseTime } from 'utils/courses';
-import TimeBlock from './TimeBlock';
+import TimeBlock, { hourBlockHeight, blockWidth } from './TimeBlock';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'table',
-    // height: '100%',
-    // width: '100%',
-  },
-  weekdayRow: {
-    display: 'table-row',
-    '& > *': {
-      display: 'table-cell',
-      position: 'sticky',
-      top: 0,
-      zIndex: 3,
+const useStyles = makeStyles((theme) => {
+  const defaultDivider = `1px solid ${theme.palette.divider}`;
+  const timeColumnWidth = 80;
+  return {
+    root: {
+      display: 'table',
+    },
+    captionCell: {
       backgroundColor: theme.palette.background.paper,
-      borderTop: `1px solid ${theme.palette.divider}`,
-      borderBottom: `1px solid ${theme.palette.divider}`,
-      borderRight: `1px solid ${theme.palette.divider}`,
       padding: theme.spacing(1),
-      width: 144,
-      minWidth: 144,
-      maxWidth: 144,
     },
-    '& > *:first-child': {
-      left: 0,
-      zIndex: 4,
-      borderLeft: `1px solid ${theme.palette.divider}`,
-      width: 96,
-      minWidth: 96,
+    row: {
+      display: 'table-row',
+      '& > *': {
+        display: 'table-cell',
+        position: 'sticky',
+        borderBottom: defaultDivider,
+        borderRight: defaultDivider,
+        width: blockWidth,
+        minWidth: blockWidth,
+        maxWidth: blockWidth,
+      },
+      '& > *:first-child': {
+        left: 0,
+        borderLeft: defaultDivider,
+        width: timeColumnWidth,
+        minWidth: timeColumnWidth,
+        maxWidth: timeColumnWidth,
+      },
     },
-  },
-  scheduleRow: {
-    display: 'table-row',
-    '& > *': {
-      display: 'table-cell',
-      borderBottom: `1px solid ${theme.palette.divider}`,
+    weekdayRow: {
+      '& > *': {
+        position: 'sticky',
+        top: 0,
+        zIndex: 3,
+        borderTop: defaultDivider,
+      },
+      '& > *:first-child': {
+        zIndex: 4,
+      },
     },
-  },
-  timeColumn: {
-    position: 'sticky',
-    left: 0,
-    zIndex: 2,
-    backgroundColor: theme.palette.background.paper,
-    borderLeft: `1px solid ${theme.palette.divider}`,
-    borderRight: `1px solid ${theme.palette.divider}`,
-    width: 96,
-    minWidth: 96,
-    '& > *': {
-      height: 64,
-      padding: theme.spacing(1),
-      borderBottom: `1px solid ${theme.palette.divider}`,
+    timeColumn: {
+      zIndex: 2,
+      '& > *': {
+        borderLeft: defaultDivider,
+        borderBottom: defaultDivider,
+        height: hourBlockHeight,
+      },
+      '& > *:last-child': {
+        borderBottom: 'none',
+      },
     },
-  },
-  dayColumn: {
-    width: 144,
-    minWidth: 144,
-    maxWidth: 144,
-    borderRight: `1px solid ${theme.palette.divider}`,
-    position: 'relative',
-  },
-}));
+  };
+});
 
 const hours = [
-  '8 am', '9 am', '10 am', '11 am',
-  '12 pm', '1 pm', '2 pm', '3 pm',
-  '4 pm', '5 pm', '6 pm', '7 pm',
-  '8 pm', '9 pm', '10 pm',
+  '8 am', '9 am', '10 am', '11 am', '12 pm',
+  '1 pm', '2 pm', '3 pm', '4 pm', '5 pm',
+  '6 pm', '7 pm', '8 pm', '9 pm', '10 pm',
 ];
 
 const weekdays = [
@@ -83,29 +76,35 @@ function Timetable(props) {
   const classes = useStyles();
 
   const { schedule } = props;
-  console.log(schedule);
-
   const blocks = (schedule || []).map(parseTime).flat();
 
   return (
-    // TODO: make the actual timetable
     <div className={classes.root}>
-      <Box className={classes.weekdayRow}>
-        <Box />
+      <Box className={`${classes.row} ${classes.weekdayRow}`}>
+        <Box className={classes.captionCell} />
         {weekdays.map((value) => (
-          <Typography variant="subtitle2" key={value}>{value}</Typography>
+          <Typography variant="subtitle2" key={value} className={classes.captionCell}>
+            {value}
+          </Typography>
         ))}
       </Box>
-      <Box className={classes.scheduleRow}>
+      <Box className={classes.row}>
         <Box className={classes.timeColumn}>
           {hours.map((value) => (
-            <Typography variant="subtitle2" key={value}>{value}</Typography>
+            <Typography variant="subtitle2" key={value} className={classes.captionCell}>
+              {value}
+            </Typography>
           ))}
         </Box>
         {shortWeekdays.map((day) => (
-          <Box className={classes.dayColumn} key={day}>
+          <Box position="relative" key={day}>
             {blocks.filter((b) => b.day === day).map((b) => (
-              <TimeBlock key={`${day}${b.startTime}`} startTime={b.startTime} endTime={b.endTime} blockInfo={b.blockInfo} />
+              <TimeBlock
+                key={`${day}${b.startTime}`}
+                startTime={b.startTime}
+                endTime={b.endTime}
+                blockInfo={b.blockInfo}
+              />
             ))}
           </Box>
         ))}

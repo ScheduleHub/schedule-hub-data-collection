@@ -145,7 +145,7 @@ const parseTime = (classInfo) => {
     let { weekdays } = c.date;
     if (start_date || end_date) return [];
     const blocks = [];
-    week.forEach((day, index) => {
+    week.forEach((day) => {
       if (weekdays.includes(day)) {
         blocks.push({
           day,
