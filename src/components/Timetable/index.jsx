@@ -8,7 +8,7 @@ import TimeBlock, { hourBlockHeight, blockWidth } from './TimeBlock';
 
 const useStyles = makeStyles((theme) => {
   const defaultDivider = `1px solid ${theme.palette.divider}`;
-  const timeColumnWidth = 80;
+  const timeColumnWidth = 72;
   return {
     root: {
       display: 'table',
