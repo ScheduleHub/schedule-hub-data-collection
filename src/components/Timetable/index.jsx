@@ -50,7 +50,6 @@ const useStyles = makeStyles((theme) => {
     timeColumn: {
       zIndex: 2,
       '& > *': {
-        borderLeft: defaultDivider,
         borderBottom: defaultDivider,
         height: hourBlockHeight,
       },
