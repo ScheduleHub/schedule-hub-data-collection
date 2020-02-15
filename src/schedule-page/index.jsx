@@ -411,7 +411,6 @@ function SchedulePage() {
             <Typography gutterBottom align="center">
               You will be given 5 class schedules.
               Please rate each schedule based on its timing (not the subjects).
-              After that, you can enter your UWaterloo email for a chance to win a prize!
             </Typography>
             <Box mt={2} mx="auto">
               <Button variant="outlined" color="primary" onClick={closeInstrModal}>
