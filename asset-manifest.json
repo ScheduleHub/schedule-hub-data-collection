@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/schedule-hub-data-collection/static/css/main.56fbaaef.chunk.css",
-    "main.js": "/schedule-hub-data-collection/static/js/main.dc0d2822.chunk.js",
-    "main.js.map": "/schedule-hub-data-collection/static/js/main.dc0d2822.chunk.js.map",
+    "main.js": "/schedule-hub-data-collection/static/js/main.de358dd4.chunk.js",
+    "main.js.map": "/schedule-hub-data-collection/static/js/main.de358dd4.chunk.js.map",
     "runtime-main.js": "/schedule-hub-data-collection/static/js/runtime-main.0920ccaf.js",
     "runtime-main.js.map": "/schedule-hub-data-collection/static/js/runtime-main.0920ccaf.js.map",
     "static/js/2.54e9c52f.chunk.js": "/schedule-hub-data-collection/static/js/2.54e9c52f.chunk.js",
     "static/js/2.54e9c52f.chunk.js.map": "/schedule-hub-data-collection/static/js/2.54e9c52f.chunk.js.map",
     "index.html": "/schedule-hub-data-collection/index.html",
-    "precache-manifest.fa1d929fe0a680b5ee1c008d9bfb6e59.js": "/schedule-hub-data-collection/precache-manifest.fa1d929fe0a680b5ee1c008d9bfb6e59.js",
+    "precache-manifest.4c2ec8abca2daeeb7d89ea2c90716230.js": "/schedule-hub-data-collection/precache-manifest.4c2ec8abca2daeeb7d89ea2c90716230.js",
     "service-worker.js": "/schedule-hub-data-collection/service-worker.js",
     "static/css/main.56fbaaef.chunk.css.map": "/schedule-hub-data-collection/static/css/main.56fbaaef.chunk.css.map",
     "static/js/2.54e9c52f.chunk.js.LICENSE": "/schedule-hub-data-collection/static/js/2.54e9c52f.chunk.js.LICENSE",
@@ -18,6 +18,6 @@
     "static/js/runtime-main.0920ccaf.js",
     "static/js/2.54e9c52f.chunk.js",
     "static/css/main.56fbaaef.chunk.css",
-    "static/js/main.dc0d2822.chunk.js"
+    "static/js/main.de358dd4.chunk.js"
   ]
 }
