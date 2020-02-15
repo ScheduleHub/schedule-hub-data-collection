@@ -30,11 +30,14 @@ import axios from 'axios';
 import UWAPI from 'utils/uwapi';
 import logo from 'res/icon.svg';
 import Timetable from 'components/Timetable';
+import PreferenceSlider from 'components/PreferenceSlider';
 
-const getSchedUrl = 'https://qemn8c6rx9.execute-api.us-east-2.amazonaws.com/test/returnscheduleforrating';
+const awsUrl = 'https://qemn8c6rx9.execute-api.us-east-2.amazonaws.com/test';
+const getSchedUrl = `${awsUrl}/returnscheduleforrating`;
+const submitUrl = `${awsUrl}/handleuserrating`;
 
 const apiKey = '4ad350333dc3859b91bcf443d14e4bf0';
-const uwapi = new UWAPI(apiKey, 20000);
+const uwapi = new UWAPI(apiKey, null);
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     flexGrow: 1,
     overflowX: 'hidden',
+    maxHeight: '100%',
     [theme.breakpoints.down('xs')]: {
       padding: 0,
     },
@@ -69,21 +73,24 @@ const useStyles = makeStyles((theme) => ({
     color: '#fff',
   },
   mainContents: {
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('xs')]: {
       padding: 0,
     },
     [theme.breakpoints.up('md')]: {
       padding: theme.spacing(2),
     },
-    flexGrow: 1,
+    flexGrow: 0,
     overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'column',
   },
-  timetableContainer: {
+  timetableBox: {
     // TODO: change the size
     // width: '100%',
     display: 'inline-block',
     maxWidth: '100%',
-    height: '80%',
+    // maxHeight: '80%',
+    alignSelf: 'flex-start',
     overflow: 'auto',
     border: `2px solid ${theme.palette.divider}`,
   },
@@ -92,12 +99,15 @@ const useStyles = makeStyles((theme) => ({
   },
   verticalStepper: {
     alignSelf: 'flex-start',
-    paddingBottom: theme.spacing(2),
-    paddingTop: theme.spacing(2),
-    width: '25%',
   },
   verticalStepperButton: {
     marginRight: theme.spacing(1),
+  },
+  verticalStepperBox: {
+    display: 'flex',
+    backgroundColor: theme.palette.common.white,
+    width: '25%',
+    overflowY: 'auto',
   },
   welcomeLogo: {
     display: 'block',
@@ -106,6 +116,18 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(4),
     marginBottom: theme.spacing(4),
     width: 128,
+  },
+  sliderBox: {
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    [theme.breakpoints.down('xs')]: {
+      padding: theme.spacing(1),
+    },
+  },
+  thankText: {
+    [theme.breakpoints.down('xs')]: {
+      padding: theme.spacing(2),
+    },
   },
 }));
 
@@ -144,6 +166,10 @@ function SchedulePage() {
   // UI states
   const [instrModalOpen, setInstrModalOpen] = useState(true);
   const [selectedSchedIndex, setSelectedSchedIndex] = useState(0);
+  const [firstClassSliderValues, setFirstClassSliderValues] = useState(Array(5).fill(50));
+  const [evenDistSliderValues, setEvenDistSliderValues] = useState(Array(5).fill(50));
+  const [clusterClassSliderValues, setClusterClassSliderValues] = useState(Array(5).fill(50));
+  const [submitting, setSubmitting] = useState(false);
 
   // Data states
   const [schedules, setSchedules] = useState([]);
@@ -188,7 +214,40 @@ function SchedulePage() {
 
   const handleBackClick = () => setSelectedSchedIndex((prevSelected) => prevSelected - 1);
 
-  const handleNextClick = () => setSelectedSchedIndex((prevSelected) => prevSelected + 1);
+  const handleNextClick = (finish) => {
+    if (finish) {
+      setSubmitting(true);
+      const data = schedules.map((value, index) => ({
+        id: value.id,
+        early_class: firstClassSliderValues[index] / 100,
+        even_dist: evenDistSliderValues[index] / 100,
+        together_class: clusterClassSliderValues[index] / 100,
+      }));
+      console.log(data);
+      axios.post(submitUrl, data).then((value) => {
+        setSelectedSchedIndex((prevSelected) => prevSelected + 1);
+        setSubmitting(false);
+      }).catch((error) => {
+        console.log(error.message);
+      });
+    } else {
+      setSelectedSchedIndex((prevSelected) => prevSelected + 1);
+    }
+  };
+
+  const createArrayChangeHandler = (update) => ((event, value) => {
+    update((prevValue) => {
+      const newValue = prevValue.slice();
+      newValue[selectedSchedIndex] = value;
+      return newValue;
+    });
+  });
+
+  const handleFirstClassSliderChange = createArrayChangeHandler(setFirstClassSliderValues);
+
+  const handleEvenDistSliderChange = createArrayChangeHandler(setEvenDistSliderValues);
+
+  const handleClusterClassSliderChange = createArrayChangeHandler(setClusterClassSliderValues);
 
   const createStep = (key, label, instr) => (
     <Step key={key}>
@@ -199,7 +258,7 @@ function SchedulePage() {
           <Button
             className={classes.verticalStepperButton}
             onClick={handleBackClick}
-            disabled={selectedSchedIndex === 0}
+            disabled={selectedSchedIndex === 0 || selectedSchedIndex === schedules.length}
           >
             Back
           </Button>
@@ -207,13 +266,42 @@ function SchedulePage() {
             variant="contained"
             color="primary"
             className={classes.verticalStepperButton}
-            onClick={handleNextClick}
+            onClick={() => handleNextClick(selectedSchedIndex + 1 >= schedules.length)}
           >
-            Next
+            {selectedSchedIndex + 1 >= schedules.length ? 'Finish' : 'Next'}
           </Button>
         </Box>
       </StepContent>
     </Step>
+  );
+
+  const sliderGroup = selectedSchedIndex < schedules.length && (
+    <Box className={classes.sliderBox}>
+      <PreferenceSlider
+        label="First class"
+        helpMsg="In general, do the days start early or late?"
+        leftLabel="Early"
+        rightLabel="Late"
+        sliderValue={firstClassSliderValues[selectedSchedIndex]}
+        onSliderValueChange={handleFirstClassSliderChange}
+      />
+      <PreferenceSlider
+        label="Even Distribution"
+        helpMsg="Does the schedule has approximately the same number of classes every day?"
+        leftLabel="Even"
+        rightLabel="Uneven"
+        sliderValue={evenDistSliderValues[selectedSchedIndex]}
+        onSliderValueChange={handleEvenDistSliderChange}
+      />
+      <PreferenceSlider
+        label="Cluster Classes"
+        helpMsg="Are the classes back to back or more separated from each other?"
+        leftLabel="Together"
+        rightLabel="Separate"
+        sliderValue={clusterClassSliderValues[selectedSchedIndex]}
+        onSliderValueChange={handleClusterClassSliderChange}
+      />
+    </Box>
   );
 
   return (
@@ -227,61 +315,83 @@ function SchedulePage() {
           </Toolbar>
         </AppBar>
 
-        <Backdrop open={!classesInfo[selectedSchedIndex]} className={classes.loadingFullPage}>
+        <Backdrop
+          open={(
+            submitting
+            || (selectedSchedIndex < schedules.length && !classesInfo[selectedSchedIndex])
+          )}
+          className={classes.loadingFullPage}
+        >
           <CircularProgress color="inherit" />
         </Backdrop>
 
         <Container maxWidth="xl" className={classes.contents}>
           <Hidden smDown>
-            <Stepper
-              activeStep={selectedSchedIndex}
-              orientation="vertical"
-              className={classes.verticalStepper}
-              connector={<StepConnector className={classes.verticalStepConnector} />}
-            >
-              {schedules.map((value, index) => (
-                createStep(
-                  value.id,
-                  `Schedule ${index + 1}`,
-                  'Read the schedule and rate its timing.',
-                )
-              ))}
-              {createStep('priceDraw', 'Enter the Price Draw')}
-            </Stepper>
+            <Box className={classes.verticalStepperBox}>
+              <Stepper
+                activeStep={selectedSchedIndex}
+                orientation="vertical"
+                className={classes.verticalStepper}
+                connector={<StepConnector className={classes.verticalStepConnector} />}
+              >
+                {schedules.map((value, index) => (
+                  createStep(
+                    value.id,
+                    `Schedule ${index + 1}`,
+                    'Read the schedule and rate its timing.',
+                  )
+                ))}
+              </Stepper>
+            </Box>
             <Divider orientation="vertical" />
           </Hidden>
-          <Box className={classes.mainContents}>
-            {/* TODO: fix padding on phones */}
-            <Box className={classes.timetableContainer}>
-              <Timetable schedule={classesInfo[selectedSchedIndex]} />
+
+          {selectedSchedIndex < schedules.length ? (
+            <Box className={classes.mainContents}>
+              {/* TODO: fix padding on phones */}
+              <Box className={classes.timetableBox}>
+                <Timetable schedule={classesInfo[selectedSchedIndex]} />
+              </Box>
+              {sliderGroup}
             </Box>
-          </Box>
+          ) : (
+            <Box className={classes.mainContents}>
+              <Typography className={classes.thankText}>
+                Thank you! Your ratings have been submitted.
+              </Typography>
+            </Box>
+          )}
         </Container>
 
         <Hidden mdUp>
-          <MobileStepper
-            variant="dots"
-            steps={schedules.length}
-            position="bottom"
-            className={classes.mobileStepper}
-            activeStep={selectedSchedIndex}
-            nextButton={(
-              <Button size="medium" onClick={handleNextClick}>
-                Next
-                <KeyboardArrowRight />
-              </Button>
+          {selectedSchedIndex < schedules.length && (
+            <MobileStepper
+              variant="dots"
+              steps={schedules.length}
+              position="static"
+              className={classes.mobileStepper}
+              activeStep={selectedSchedIndex}
+              nextButton={(
+                <Button
+                  size="medium"
+                  onClick={() => handleNextClick(selectedSchedIndex + 1 >= schedules.length)}
+                >
+                  {selectedSchedIndex + 1 === schedules.length ? 'Finish' : 'Next'}
+                  <KeyboardArrowRight />
+                </Button>
             )}
-            backButton={(
-              <Button
-                size="medium"
-                onClick={handleBackClick}
-                disabled={selectedSchedIndex === 0}
-              >
-                <KeyboardArrowLeft />
-                Back
-              </Button>
+              backButton={(
+                <Button
+                  size="medium"
+                  onClick={handleBackClick}
+                  disabled={selectedSchedIndex === 0}
+                >
+                  <KeyboardArrowLeft />
+                  Back
+                </Button>
             )}
-          />
+            />
+          )}
         </Hidden>
       </div>
 
