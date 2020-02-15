@@ -1,6 +1,6 @@
-# schedule-planner-data-collection
+# schedule-hub-data-collection
 
-https://yuhao-c.github.io/schedule-planner-data-collection/
+https://schedulehub.github.io/schedule-hub-data-collection/
 
 ## Install Dependencies
 

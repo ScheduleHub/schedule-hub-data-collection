@@ -1,7 +1,7 @@
 {
   "name": "schedule-hub-data-collection",
   "version": "1.0.0",
-  "homepage": "https://schedulehub.github.io/schedule-hub-data-collection",
+  "homepage": "https://schedulehub.github.io/schedule-hub-data-collection/",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.8.3",
