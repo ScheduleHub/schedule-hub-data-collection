@@ -1,7 +1,5 @@
 # schedule-hub-data-collection
 
-https://schedulehub.github.io/schedule-hub-data-collection/
-
 ## Install Dependencies
 
 `npm install`
